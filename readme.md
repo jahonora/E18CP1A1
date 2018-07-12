@@ -1,3 +1,5 @@
+#LINK A TRELLO: https://trello.com/b/2W32Y2z4/semana-18-actividad-1
+
 # Experiencia 18 - Actividad Presencial I
 ## SCRUM - Agilidad
 
