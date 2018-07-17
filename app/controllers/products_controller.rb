@@ -1,11 +1,16 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
   before_action :set_product, only: [:show, :edit, :update, :destroy]
-
+  before_action :check_can_modify, only: [:edit, :update, :destroy]
+  helper_method :can_modify?
   # GET /products
   # GET /products.json
   def index
-    @products = Product.all
+    @products = if params[:term]
+      Product.where('name LIKE ?', "%#{params[:term]}%")
+    else
+      Product.all
+    end
   end
 
   # GET /products/1
@@ -71,5 +76,13 @@ class ProductsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
       params.require(:product).permit(:name, :price)
+    end
+
+    def can_modify? product
+        product.user == current_user
+    end
+
+    def check_can_modify
+        redirect_to products_url, notice: 'You cant access this operation' unless can_modify?(@product)     
     end
 end

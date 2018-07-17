@@ -7,24 +7,27 @@
   <div class="collapse navbar-collapse" id="navbarColor01">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <%= link_to("Inicio", products_path, class: "nav-link") %>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
+        <%= link_to("Vender producto", new_product_path, class: "nav-link") %>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Pricing</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">About</a>
+      <li>
+        <%= form_tag(products_path, method: :get, class: "form-inline my-2 my-lg-0") do %>
+          <%= text_field_tag :term, params[:term], class: "form-control mr-sm-2" %>
+          <%= submit_tag 'Buscar', class: "btn btn-secondary my-2 my-sm-0" %>
+        <% end %>
       </li>
     </ul>
 	<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-	  <button type="button" class="btn btn-info"> <%=current_user.try(:email) %>  </button>
+	  <button type="button" class="btn btn-info"> <%=current_user.try(:email) ? current_user.try(:email) : "Ingresar" %>  </button>
 	  <div class="btn-group show" role="group">
 	    <button id="btnGroupDrop2" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
 	    <div class="dropdown-menu show" aria-labelledby="btnGroupDrop2" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 36px, 0px); top: 0px; left: 0px; will-change: transform;">
-	      <a class="dropdown-item" href="#"> <%= link_to("Salir", destroy_user_session_path , method: :delete) if current_user %></a>
+	      <%= link_to("Salir", destroy_user_session_path, method: :delete, class: "dropdown-item") if current_user %>
+        <%= link_to("Log In", new_user_session_path, class: "dropdown-item") if !current_user %>
+        <%= link_to("Sign Up", new_user_registration_path, class: "dropdown-item") if !current_user %>
+
 	    </div>
 	  </div>
 	</div>
