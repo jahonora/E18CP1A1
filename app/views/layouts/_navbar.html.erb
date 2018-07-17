@@ -12,6 +12,12 @@
       <li class="nav-item">
         <%= link_to("Vender producto", new_product_path, class: "nav-link") %>
       </li>
+      <li class="nav-item">
+        <%= link_to("Tus productos", your_products_path, class: "nav-link") %>
+      </li>
+      <li class="nav-item">
+        <%= link_to("Tus compras", bought_products_path, class: "nav-link") %>
+      </li>
       <li>
         <%= form_tag(products_path, method: :get, class: "form-inline my-2 my-lg-0") do %>
           <%= text_field_tag :term, params[:term], class: "form-control mr-sm-2" %>

@@ -10,15 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_12_010037) do
+ActiveRecord::Schema.define(version: 2018_07_17_004235) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
     t.string "resource_type"
-    t.integer "resource_id"
+    t.bigint "resource_id"
     t.string "author_type"
-    t.integer "author_id"
+    t.bigint "author_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
@@ -48,10 +51,9 @@ ActiveRecord::Schema.define(version: 2018_07_12_010037) do
     t.integer "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id_id"
-    t.integer "user_id"
+    t.bigint "user_id"
+    t.integer "buyer_id"
     t.index ["user_id"], name: "index_products_on_user_id"
-    t.index ["user_id_id"], name: "index_products_on_user_id_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -72,4 +74,6 @@ ActiveRecord::Schema.define(version: 2018_07_12_010037) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "products", "users"
+  add_foreign_key "products", "users", column: "buyer_id"
 end

@@ -1,8 +1,9 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :buy]
   before_action :check_can_modify, only: [:edit, :update, :destroy]
   helper_method :can_modify?
+  helper_method :can_buy?
   # GET /products
   # GET /products.json
   def index
@@ -10,9 +11,16 @@ class ProductsController < ApplicationController
       Product.where('name LIKE ?', "%#{params[:term]}%")
     else
       Product.all
-    end
+    end 
   end
 
+  def your
+    @products = Product.where(user: current_user)
+  end
+
+  def bought
+    @products = Product.where(buyer: current_user)
+  end
   # GET /products/1
   # GET /products/1.json
   def show
@@ -25,6 +33,19 @@ class ProductsController < ApplicationController
 
   # GET /products/1/edit
   def edit
+  end
+
+  def buy
+    @product.buyer = current_user
+    respond_to do |format|
+      if @product.save
+        format.html { redirect_to @product, notice: 'CONGRATULATIONS YOU BUY A PRODUCT!!!' }
+        format.json { render :show, status: :created, location: @product }
+      else
+        format.html { redirect_to products_url , notice: 'You cant do that' }
+        format.json { render json: @product.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # POST /products
@@ -84,5 +105,13 @@ class ProductsController < ApplicationController
 
     def check_can_modify
         redirect_to products_url, notice: 'You cant access this operation' unless can_modify?(@product)     
+    end
+
+    def can_buy? product
+      if product.buyer.nil? && !current_user.nil?
+        product.user != current_user
+      else
+        false
+      end
     end
 end
