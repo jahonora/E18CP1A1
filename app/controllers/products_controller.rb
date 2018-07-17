@@ -8,10 +8,10 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @products = if params[:term]
-      Product.where('name LIKE ?', "%#{params[:term]}%")
+      Product.where('name LIKE ?', "%#{params[:term]}%").where(buyer: nil)
     else
-      Product.all
-    end 
+      Product.where(buyer: nil)
+    end
   end
 
   def your
